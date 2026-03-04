@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AppleKart | iPhone Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface2: #1e1e1e;
+      --border: rgba(255,255,255,0.07);
+      --text: #f0f0f0;
+      --muted: #888;
+      --accent: #e8c97e;
+      --accent2: #c9a84c;
+      --green: #4ade80;
+      --red: #ff6b6b;
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* ─── HEADER ─── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
+      display: flex; align-items: center; gap: 20px;
+      padding-top: 14px; padding-bottom: 14px;
+    }
+
+    .brand { display: flex; flex-direction: column; line-height: 1.1; }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), #fff 60%, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .mini { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+
+
+    .top-actions { display: flex; gap: 10px; margin-left: auto; }
+    .pill {
+      padding: 7px 16px; border-radius: 50px; font-size: 12px; font-weight: 500;
+      cursor: pointer; letter-spacing: 0.3px;
+    }
+    .pill.cod { background: var(--green); color: #000; }
+    .pill.help { border: 1px solid var(--border); color: var(--muted); transition: all 0.2s; }
+    .pill.help:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── HERO ─── */
+    .hero {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      padding-top: 70px; padding-bottom: 70px;
+    }
+
+    .hero-left { display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(232,201,126,0.1); border: 1px solid rgba(232,201,126,0.25);
+      color: var(--accent); font-size: 12px; font-weight: 500;
+      padding: 6px 14px; border-radius: 50px; width: fit-content; letter-spacing: 0.5px;
+    }
+    .hero-tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 900; line-height: 1.08;
+      letter-spacing: -1.5px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .hero p { color: var(--muted); font-size: 15px; max-width: 400px; }
+
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+    .badge {
+      padding: 6px 14px; border-radius: 50px; font-size: 12px; font-weight: 500;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+    }
+
+    .hero-right { display: flex; align-items: center; justify-content: center; }
+
+    .hero-card {
+      background: linear-gradient(135deg, #1c1a10, #2a2510);
+      border: 1px solid rgba(232,201,126,0.2);
+      border-radius: 24px; padding: 40px;
+      text-align: center; width: 100%;
+      position: relative; overflow: hidden;
+    }
+    .hero-card::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,201,126,0.15), transparent 70%);
+    }
+    .hero-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 28px;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .hero-card .deal-amount { font-size: 48px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
+    .hero-card .deal-label { color: var(--muted); margin-top: 6px; font-size: 14px; }
+    .hero-card small { display: block; margin-top: 16px; color: rgba(255,255,255,0.3); font-size: 11px; }
+
+    /* ─── CATEGORY NAV ─── */
+    .catbar {
+      display: flex; gap: 8px; padding: 12px 0 0;
+      border-bottom: 1px solid var(--border); overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .catbar::-webkit-scrollbar { display: none; }
+
+    .cat {
+      text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 500;
+      padding: 10px 18px; border-radius: 50px 50px 0 0;
+      border: 1px solid transparent; border-bottom: none;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .cat:hover { color: var(--text); }
+    .cat.active {
+      color: var(--accent); background: var(--surface);
+      border-color: var(--border); border-bottom-color: var(--surface);
+      position: relative; top: 1px;
+    }
+
+    /* ─── SECTION TITLE ─── */
+    .section-head {
+      display: flex; align-items: baseline; gap: 14px;
+      padding: 40px 0 24px;
+    }
+    .section-head h2 {
+      font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+    }
+    .section-head span { color: var(--muted); font-size: 13px; }
+
+    /* ─── GRID ─── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px; padding-bottom: 60px;
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      animation: fadeUp 0.5s both;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(232,201,126,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,201,126,0.1);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger children */
+    .card:nth-child(1)  { animation-delay: 0.05s; }
+    .card:nth-child(2)  { animation-delay: 0.10s; }
+    .card:nth-child(3)  { animation-delay: 0.15s; }
+    .card:nth-child(4)  { animation-delay: 0.20s; }
+    .card:nth-child(5)  { animation-delay: 0.25s; }
+    .card:nth-child(6)  { animation-delay: 0.30s; }
+    .card:nth-child(7)  { animation-delay: 0.35s; }
+    .card:nth-child(8)  { animation-delay: 0.40s; }
+    .card:nth-child(9)  { animation-delay: 0.45s; }
+    .card:nth-child(10) { animation-delay: 0.50s; }
+    .card:nth-child(11) { animation-delay: 0.55s; }
+
+    .card-img {
+      height: 180px;
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--muted);
+      position: relative; overflow: hidden;
+    }
+    .card-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(232,201,126,0.08), transparent 60%);
+    }
+    .card:hover .card-img { color: var(--accent); }
+
+    .card-body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+
+    .card-body h3 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+    .card-body .sub { font-size: 12px; color: var(--muted); }
+
+    .price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .price { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    .strike { font-size: 12px; color: var(--muted); text-decoration: line-through; }
+    .off {
+      font-size: 11px; font-weight: 600; color: var(--green);
+      background: rgba(74,222,128,0.1); padding: 2px 7px; border-radius: 50px;
+    }
+
+    .meta {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px;
+    }
+    .meta span {
+      font-size: 11px; color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      padding: 3px 9px; border-radius: 50px;
+      border: 1px solid var(--border);
+    }
+
+    .btn {
+      display: block; text-align: center; text-decoration: none;
+      background: var(--accent); color: #000;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      padding: 11px; border-radius: 10px; margin-top: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn:hover { background: #fff; transform: scale(1.02); }
+    .btn:active { transform: scale(0.98); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 32px 24px; gap: 20px; flex-wrap: wrap;
+    }
+    .foot-title {
+      font-family: 'Playfair Display', serif; font-size: 20px;
+      font-weight: 700; color: var(--accent); margin-bottom: 4px;
+    }
+    .foot-text { font-size: 12px; color: var(--muted); }
+    .foot-links { display: flex; gap: 20px; }
+    .foot-links a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .foot-links a:hover { color: var(--accent); }
+    .foot-copy { width: 100%; text-align: center; padding-bottom: 20px; color: rgba(255,255,255,0.15); font-size: 11px; }
+
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; padding-top: 40px; padding-bottom: 40px; }
+      .hero-right { display: none; }
+      .topbar-inner { flex-wrap: wrap; }
+      .search { max-width: 100%; order: 3; flex: 0 0 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── HEADER ─── -->
+  <header>
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <div class="logo">AppleKart</div>
+        <div class="mini">iPhone Store • COD Only</div>
+      </div>
+
+
+      <div class="top-actions">
+        <span class="pill cod">✦ Cash on Delivery</span>
+        <span class="pill help">Help</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── HERO ─── -->
+  <section class="wrap hero">
+    <div class="hero-left">
+      <div class="hero-tag">Live Deals Available</div>
+      <h1>Buy <span>iPhone</span><br>in one click.</h1>
+      <p>Select a model → Fill address → Cash on Delivery → Done ✅ No advance payment, no hassle.</p>
+      <div class="hero-badges">
+        <span class="badge">⚡ Fast Checkout</span>
+        <span class="badge">🚚 Free Delivery*</span>
+        <span class="badge">🔒 Secure COD</span>
+        <span class="badge">↩ Easy Returns</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card">
+        <h3>Today's Deal</h3>
+        <div class="deal-amount">₹500</div>
+        <div class="deal-label">off on delivery charges</div>
+        <small>*Demo UI — prices are illustrative</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CATEGORY NAV ─── -->
+  <nav class="wrap catbar">
+    <a href="#" class="cat active">All iPhones</a>
+    <a href="#" class="cat">New</a>
+    <a href="#" class="cat">Budget (Under ₹20k)</a>
+    <a href="#" class="cat">Pro Models</a>
+    <a href="#" class="cat">Accessories</a>
+  </nav>
+
+  <!-- ─── PRODUCTS ─── -->
+  <main class="wrap">
+    <div class="section-head">
+      <h2>All iPhones</h2>
+      <span>11 models available</span>
+    </div>
+
+    <div class="grid">
+
+      <article class="card">
+        <div class="card-img">iPhone 6</div>
+        <div class="card-body">
+          <h3>Apple iPhone 6</h3>
+          <p class="sub">64 GB · Space Grey · Demo</p>
+          <div class="price-row">
+            <div class="price">₹9,999</div>
+            <div class="strike">₹12,999</div>
+            <div class="off">23% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.1</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="/buy/?model=iPhone%206">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 7</div>
+        <div class="card-body">
+          <h3>Apple iPhone 7</h3>
+          <p class="sub">128 GB · Black · Demo</p>
+          <div class="price-row">
+            <div class="price">₹11,999</div>
+            <div class="strike">₹14,999</div>
+            <div class="off">20% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.2</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="/buy/?model=iPhone%207">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 8</div>
+        <div class="card-body">
+          <h3>Apple iPhone 8</h3>
+          <p class="sub">64 GB · Silver · Demo</p>
+          <div class="price-row">
+            <div class="price">₹13,999</div>
+            <div class="strike">₹18,999</div>
+            <div class="off">26% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.3</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href ="/buy/?model=iPhone%208">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone X</div>
+        <div class="card-body">
+          <h3>Apple iPhone X</h3>
+          <p class="sub">256 GB · Space Grey · Demo</p>
+          <div class="price-row">
+            <div class="price">₹19,999</div>
+            <div class="strike">₹24,999</div>
+            <div class="off">20% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.4</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%20X">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 11</div>
+        <div class="card-body">
+          <h3>Apple iPhone 11</h3>
+          <p class="sub">128 GB · Purple · Demo</p>
+          <div class="price-row">
+            <div class="price">₹29,999</div>
+            <div class="strike">₹34,999</div>
+            <div class="off">14% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.6</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2011">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 12</div>
+        <div class="card-body">
+          <h3>Apple iPhone 12</h3>
+          <p class="sub">128 GB · Blue · Demo</p>
+          <div class="price-row">
+            <div class="price">₹39,999</div>
+            <div class="strike">₹44,999</div>
+            <div class="off">11% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.6</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2012">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 13</div>
+        <div class="card-body">
+          <h3>Apple iPhone 13</h3>
+          <p class="sub">128 GB · Midnight · Demo</p>
+          <div class="price-row">
+            <div class="price">₹49,999</div>
+            <div class="strike">₹54,999</div>
+            <div class="off">9% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.7</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2013">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 14</div>
+        <div class="card-body">
+          <h3>Apple iPhone 14</h3>
+          <p class="sub">256 GB · Starlight · Demo</p>
+          <div class="price-row">
+            <div class="price">₹59,999</div>
+            <div class="strike">₹64,999</div>
+            <div class="off">7% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.7</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2014">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 15</div>
+        <div class="card-body">
+          <h3>Apple iPhone 15</h3>
+          <p class="sub">256 GB · Pink · Demo</p>
+          <div class="price-row">
+            <div class="price">₹69,999</div>
+            <div class="strike">₹74,999</div>
+            <div class="off">6% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.8</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2015">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 16</div>
+        <div class="card-body">
+          <h3>Apple iPhone 16</h3>
+          <p class="sub">256 GB · Desert Titanium · Demo</p>
+          <div class="price-row">
+            <div class="price">₹79,999</div>
+            <div class="strike">₹84,999</div>
+            <div class="off">5% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.8</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2016">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 17</div>
+        <div class="card-body">
+          <h3>Apple iPhone 17</h3>
+          <p class="sub">512 GB · Titanium Black · Demo</p>
+          <div class="price-row">
+            <div class="price">₹89,999</div>
+            <div class="strike">₹94,999</div>
+            <div class="off">5% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 4.9</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2017">Buy Now</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-img">iPhone 18</div>
+        <div class="card-body">
+          <h3>Apple iPhone 18</h3>
+          <p class="sub">512 GB · Titanium White · Demo</p>
+          <div class="price-row">
+            <div class="price">₹99,999</div>
+            <div class="strike">₹1,04,999</div>
+            <div class="off">4% off</div>
+          </div>
+          <div class="meta">
+            <span>⭐ 5.0</span><span>COD</span><span>Free Delivery*</span>
+          </div>
+          <a class="btn" href="buy/?model=iPhone%2018">Buy Now</a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="wrap footer-inner">
+      <div>
+        <div class="foot-title">AppleKart</div>
+        <p class="foot-text">Demo UI · Beginner project · COD checkout only</p>
+      </div>
+      <div class="foot-links">
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="wrap foot-copy">© 2025 AppleKart · Demo Project</div>
+  </footer>
+
+</body>
+</html>

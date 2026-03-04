@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AppleKart | Buy Now</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root{
+      --bg:#0a0a0a;
+      --surface:#141414;
+      --surface2:#1e1e1e;
+      --border: rgba(255,255,255,0.07);
+      --text:#f0f0f0;
+      --muted:#888;
+      --accent:#e8c97e;
+      --accent2:#c9a84c;
+      --green:#4ade80;
+      --radius:16px;
+    }
+
+    body{
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content:'';
+      position: fixed; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+    header{
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+      gap: 12px;
+    }
+    .brand { display:flex; flex-direction:column; line-height:1.1; }
+    .logo{
+      font-family:'Playfair Display', serif;
+      font-size: 22px; font-weight: 900; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), #fff 60%, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .mini{ font-size:10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+
+    .pill{
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-decoration:none;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .pill:hover{ border-color: rgba(232,201,126,0.3); color: var(--accent); }
+
+    main{ padding: 42px 0 64px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card{
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow:hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .card-head{
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap: 12px;
+    }
+    .card-head h1{
+      font-family:'Playfair Display', serif;
+      font-size: 22px;
+      letter-spacing: -0.5px;
+    }
+    .model-chip{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(232,201,126,0.25);
+      background: rgba(232,201,126,0.08);
+      color: var(--accent);
+    }
+
+    .card-body{ padding: 18px; }
+
+    .hint{
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    form{ display:flex; flex-direction:column; gap: 12px; }
+
+    label{
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 6px;
+      display:block;
+    }
+
+    .field{
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 12px;
+      outline: none;
+      color: var(--text);
+      font-family: inherit;
+      transition: border-color .2s, box-shadow .2s;
+      width: 100%;
+    }
+    .field:focus{
+      border-color: rgba(232,201,126,0.35);
+      box-shadow: 0 0 0 4px rgba(232,201,126,0.08);
+    }
+
+    textarea.field{ min-height: 110px; resize: vertical; }
+
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn{
+      margin-top: 6px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 0;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s, background .2s;
+    }
+    .btn:hover{ background: #fff; transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0px) scale(0.99); }
+
+    .small{
+      margin-top: 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* Summary */
+    .summary{
+      padding: 18px;
+      background: linear-gradient(135deg, #1c1a10, #2a2510);
+      border: 1px solid rgba(232,201,126,0.2);
+      border-radius: 22px;
+      position: sticky;
+      top: 84px;
+    }
+    .summary h3{
+      font-family:'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .sum-row{
+      display:flex; justify-content:space-between; gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.10);
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+    .sum-row:last-child{ border-bottom: none; }
+    .sum-row strong{ color: #fff; }
+
+    .cod{
+      display:flex; align-items:center; gap: 10px;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.25);
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+    }
+    .dot{
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(74,222,128,0.1);
+      flex: 0 0 auto;
+    }
+
+    @media(max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+      .summary{ position: static; }
+      .row{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <div class="logo">AppleKart</div>
+        <div class="mini">Buy Now • COD Only</div>
+      </div>
+      <a class="pill" href="/">← Back to Store</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <!-- Form Card -->
+      <section class="card">
+        <div class="card-head">
+          <h1>Checkout</h1>
+          <div class="model-chip" id="modelChip">Model: —</div>
+        </div>
+
+        <div class="card-body">
+          <p class="hint">
+            Fill details below. We’ll confirm your order on call / SMS.  
+            <span style="color: rgba(232,201,126,0.8)">Cash on Delivery</span> only ✅
+          </p>
+
+          <!-- ✅ Django me: method="POST" + {% csrf_token %} add kar dena -->
+          <form action="/buy/" method="POST">
+            {% csrf_token %}
+            <!-- Django use: {% csrf_token %} -->
+
+            <!-- Model hidden input (querystring se fill hoga) -->
+            <input type="hidden" name="model" id="modelInput" value="">
+
+            <div>
+              <label for="name">Full Name</label>
+              <input class="field" id="name" name="name" type="text" placeholder="Enter your name" required />
+            </div>
+
+            <div class="row">
+              <div>
+                <label for="mobile">Mobile Number</label>
+                <input class="field" id="mobile" name="mobile" type="tel"
+                       placeholder="10-digit mobile number"
+                       inputmode="numeric" pattern="[0-9]{10}" required />
+              </div>
+              <div>
+                <label for="pincode">Pincode (optional)</label>
+                <input class="field" id="pincode" name="pincode" type="text"
+                       placeholder="e.g. 313001" inputmode="numeric" />
+              </div>
+            </div>
+
+            <div>
+              <label for="address">Full Address</label>
+              <textarea class="field" id="address" name="address" placeholder="House no, Street, Area, City, State" required></textarea>
+            </div>
+
+            <button class="btn" type="submit">Place COD Order</button>
+
+            <div class="small">By placing order, you agree this is a demo project UI.</div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Summary Card -->
+      <aside class="summary">
+        <h3>Order Summary</h3>
+        <div class="sum-row">
+          <span>Selected Model</span>
+          <strong id="modelText">—</strong>
+        </div>
+        <div class="sum-row">
+          <span>Payment</span>
+          <strong>Cash on Delivery</strong>
+        </div>
+        <div class="sum-row">
+          <span>Delivery</span>
+          <strong>Free*</strong>
+        </div>
+
+        <div class="cod">
+          <span class="dot"></span>
+          <span>Pay only when you receive the product.</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // Query param: ?model=iPhone%206
+    const params = new URLSearchParams(window.location.search);
+    const model = params.get("model") || "iPhone";
+
+    document.getElementById("modelInput").value = model;
+    document.getElementById("modelChip").textContent = "Model: " + model;
+    document.getElementById("modelText").textContent = model;
+  </script>
+</body>
+</html>
