@@ -1,8 +1,8 @@
-# AppleKart – Django E-commerce Website
+# Applecart – Django E-commerce Website
 
-AppleKart is a beginner level Django web application that simulates a simple online store for iPhones.  
-Users can browse iPhone models and place an order using a "Buy Now" form.  
-The submitted order details are stored in a MySQL database through Django models.
+Applecart is a beginner level Django web application that simulates a simple online store for iPhones.  
+Users can browse iPhone models and place an order using a **Buy Now** form.  
+The submitted order details are stored in a **MySQL database** through Django models.
 
 This project was built to practice the core concepts of Django such as **models, views, templates, and form handling**.
 
@@ -19,11 +19,11 @@ This project was built to practice the core concepts of Django such as **models,
 
 ## Tech Stack
 
-- Python
-- Django
-- HTML
-- CSS
-- MySQL
+- Python  
+- Django  
+- HTML  
+- CSS  
+- MySQL  
 
 ---
 
